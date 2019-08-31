@@ -3,7 +3,10 @@ const p = require("arcsecond");
 const nativeObjs = ["circle", "svg"];
 
 const strLimit = p.char("'");
-const numParser = p.digits;
+const numParser = p.digits.map(r => ({
+  type: "number",
+  value: r
+}));
 const strParser = p
   .between(strLimit)(strLimit)(p.everythingUntil(strLimit))
   .map(r => ({
