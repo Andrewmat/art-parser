@@ -4,8 +4,8 @@
   "description": "Parser for .art files",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node test.js",
+    "test": "node test.js example.art > output.json"
   },
   "keywords": [
     "art",
@@ -16,5 +16,13 @@
   "license": "MIT",
   "dependencies": {
     "arcsecond": "^2.0.1"
+  },
+  "devDependencies": {
+    "prettier": "^1.18.2"
+  },
+  "prettier": {
+    "singleQuote": true,
+    "trailingComma": "es5",
+    "semi": false
   }
 }
