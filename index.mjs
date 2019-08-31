@@ -1,4 +1,4 @@
-const p = require('arcsecond')
+import p from 'arcsecond'
 
 const nativeObjs = ['svg', 'circle', 'text']
 const commands = ['def', 'draw']
@@ -109,4 +109,6 @@ const commandParser = p
 
 const blockParser = p.many(commandParser)
 
-module.exports = { artParser: blockParser }
+const artParser = blockParser
+
+export default artParser

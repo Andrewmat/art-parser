@@ -1,7 +1,7 @@
-const fs = require('fs')
-const args = process.argv.slice(2)
-const { artParser } = require('./index.js')
+import fs from 'fs'
+import artParser from '../index.mjs'
 
+const args = process.argv.slice(2)
 const fileName = args[0]
 
 if (!fileName) {

@@ -2,10 +2,11 @@
   "name": "art-parser",
   "version": "0.1.0",
   "description": "Parser for .art files",
-  "main": "index.js",
+  "main": "index.mjs",
+  "type": "module",
   "scripts": {
-    "start": "node test.js",
-    "test": "node test.js example.art > output.json"
+    "serve": "serve page_test/",
+    "test": "node --experimental-modules ./test/test.mjs ./test/example.art > ./test/output.json"
   },
   "keywords": [
     "art",
@@ -18,7 +19,9 @@
     "arcsecond": "^2.0.1"
   },
   "devDependencies": {
-    "prettier": "^1.18.2"
+    "fs": "^0.0.1-security",
+    "prettier": "^1.18.2",
+    "serve": "^11.1.0"
   },
   "prettier": {
     "singleQuote": true,
