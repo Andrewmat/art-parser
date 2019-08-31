@@ -1,3 +1,0 @@
-draw myObject() {
-  draw circle() {}
-}
