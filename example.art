@@ -1,5 +1,5 @@
-set myCircle = circle(radius: 20, text: 'my circle') {}
+def myCircle = circle(radius: 20) {}
 
 draw svg(width: 400, height: 200) {
-  draw myCircle(color: 'red', x: 30, y: 30)
+  draw myCircle(color: 'red', x: 30, y: 30) {}
 }

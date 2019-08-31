@@ -1,11 +1,11 @@
 const p = require("arcsecond");
 
-const nativeObjs = ["circle", "svg"];
+const nativeObjs = ["circle", "svg", "text"];
 
 const strLimit = p.char("'");
 const numParser = p.digits.map(r => ({
   type: "number",
-  value: r
+  value: Number(r)
 }));
 const strParser = p
   .between(strLimit)(strLimit)(p.everythingUntil(strLimit))
@@ -56,10 +56,10 @@ const objectAttributeListParser = betweenParenthesis(
 );
 
 const objectChildrenParser = betweenCurlyBrackets(
-  p.recursiveParser(() => {
-    return commandParser;
-    // return p.everythingUntil(p.char("}"));
-  })
+  p.pipeParsers([
+    p.everythingUntil(p.char("}")),
+    p.recursiveParser(() => blockParser)
+  ])
 );
 
 const objectParser = p
@@ -79,9 +79,9 @@ const objectParser = p
     };
   });
 
-const objectDeclarationParser = p
+const objectDefinitionParser = p
   .sequenceOf([
-    p.str("set"),
+    p.str("def"),
     p.whitespace,
     objectNameParser,
     p.optionalWhitespace,
@@ -92,7 +92,7 @@ const objectDeclarationParser = p
   .map(rs => {
     return {
       type: "command",
-      value: "declare-object",
+      value: "define-object",
       arguments: [rs[2], rs[6]]
     };
   });
@@ -107,14 +107,8 @@ const drawCommandParser = p
     };
   });
 
-const commandParser = p
-  .many(
-    p.choice([
-      drawCommandParser,
-      objectDeclarationParser,
-      p.optionalWhitespace.map(() => undefined)
-    ])
-  )
-  .map(rs => rs.filter(Boolean));
+const blockParser = p.many(
+  p.choice([drawCommandParser, objectDefinitionParser, p.skip(p.whitespace)])
+);
 
-module.exports = { artParser: commandParser };
+module.exports = { artParser: blockParser };
