@@ -18,10 +18,10 @@ function block(commands, scope) {
 }
 
 function def({ name, value }, defs) {
-  if (defs.has(name)) {
+  if (defs.has(name.value)) {
     throw new Error(`Cannot define '${args.name}'. It is already defined`)
   }
-  defs.set(name, value)
+  defs.set(name.value, value)
 }
 
 function draw(object, defs, scope) {
@@ -74,9 +74,9 @@ function drawNative({ name, attributes, children }) {
 function findObjectDefinition(object, defs, scope) {
   let foundObject
   if (defs.has(object.name.value)) {
-    foundObject = defs.get(name.value)
-  } else if (scope.defs.has(name.value)) {
-    foundObject = scope.defs.get(name.value)
+    foundObject = defs.get(object.name.value)
+  } else if (scope.defs.has(object.name.value)) {
+    foundObject = scope.defs.get(object.name.value)
   } else {
     throw new Error(`Cannot find object '${name.value}'`)
   }
