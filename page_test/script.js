@@ -1,5 +1,5 @@
-import artParser from './art-parser.js'
-import artAsDOM from './art-dom.js'
+import artParser from './dist/art-parser.js'
+// import artAsDOM from './art-dom.js'
 
 const $ = document.querySelector.bind(document)
 
@@ -12,9 +12,14 @@ $('#submit').addEventListener('click', () => {
 
   const tree = artParser.run(targetString)
 
-  const treeDom = artAsDOM(tree.result)
-  console.log(treeDom)
-  treeDom.forEach(dom => {
-    $('#output').appendChild(dom)
-  })
+  // const treeDom = artAsDOM(tree.result)
+  // treeDom.forEach(dom => {
+  //   $('#output').appendChild(dom)
+  // })
+
+  if (tree.isError) {
+    $('#output').value = tree.error
+  } else {
+    $('#output').value = JSON.stringify(tree.result, 0, 2)
+  }
 })

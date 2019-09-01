@@ -5,7 +5,7 @@
   "main": "src/index.mjs",
   "type": "module",
   "scripts": {
-    "serve": "serve page_test/",
+    "serve": "rollup --config && serve page_test/",
     "test": "node --experimental-modules ./test/test.mjs ./test/example.art > ./test/output.json"
   },
   "keywords": [
@@ -21,6 +21,8 @@
   "devDependencies": {
     "fs": "^0.0.1-security",
     "prettier": "^1.18.2",
+    "rollup": "^1.20.3",
+    "rollup-plugin-node-resolve": "^5.2.0",
     "serve": "^11.1.0"
   },
   "prettier": {
