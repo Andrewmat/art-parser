@@ -1,5 +1,5 @@
-import { commandListParser } from './command.js'
+import artParser from './parser/index.js'
+import artInterpreter from './interpreter/index.js'
+import artSvgRenderer from './renderer/svg.js'
 
-const artParser = commandListParser
-
-export default artParser
+export { artParser, artInterpreter, artSvgRenderer }

@@ -35,7 +35,7 @@ const mapperParser = P.sequenceOf([
   P.optionalWhitespace,
   betweenParenthesis(
     P.sepBy(P.optionalWhitespace, P.char(','), P.optionalWhitespace)(
-      valueParser
+      varNameParser
     )
   ),
   P.optionalWhitespace,

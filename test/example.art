@@ -1,6 +1,6 @@
-def myCircle circle(radius: 20)
+def myCircle circle(r: 20)
 
-svg(width: 400, height: 200) {
-  myCircle(color: 'red', x: 30, y: 30)
-  myCircle(color: 'blue', x: 60, y: 60)
+draw svg(width: 400, height: 200) {
+  draw myCircle(fill: 'red', cx: 30, cy: 30)
+  draw myCircle(fill: 'blue', cx: 60, cy: 60)
 }

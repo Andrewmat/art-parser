@@ -6,18 +6,9 @@ const defArgsParser = P.sequenceOf([
   varNameParser,
   P.whitespace,
   objectParser,
-]).map(r =>
-  node('def-args', {
-    name: r[0],
-    value: r[2],
-  })
-)
+]).map(r => node('args', [r[0], r[2]]))
 
-const drawArgsParser = objectParser.map(r =>
-  node('draw-args', {
-    value: r,
-  })
-)
+const drawArgsParser = objectParser.map(r => node('args', [r]))
 
 const argsParserMap = new Map([
   ['def', defArgsParser],
@@ -32,7 +23,7 @@ const commandParser = P.choice([
   drawArgsParser,
 ]).chain(result => {
   // implicit "draw" commmand
-  if (result.type === 'draw-args') {
+  if (result.type === 'args') {
     return P.succeedWith(
       node('command', {
         command: 'draw',
@@ -42,7 +33,7 @@ const commandParser = P.choice([
   }
   let argParser = argsParserMap.get(result)
   if (!argParser) {
-    return fail(`Unrecognized command '${result}'`)
+    return P.fail(`Unrecognized command '${result}'`)
   }
 
   return argParser.map(args =>

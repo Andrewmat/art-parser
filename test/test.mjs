@@ -1,5 +1,5 @@
 import fs from 'fs'
-import artParser from '../src/index.mjs'
+import { artParser } from '../src/index.mjs'
 
 const args = process.argv.slice(2)
 const fileName = args[0]

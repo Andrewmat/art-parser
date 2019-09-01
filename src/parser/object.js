@@ -36,8 +36,8 @@ const objectParser = P.sequenceOf([
 ]).map(rs =>
   node('object', {
     name: rs[0],
-    attributes: rs[2] || {},
-    block: rs[4] || [],
+    attributes: rs[2] || node('attribute-list', { values: [] }),
+    block: rs[4] || node('block', { value: [] }),
   })
 )
 
