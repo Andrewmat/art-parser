@@ -9,7 +9,6 @@ const varNameParser = P.sequenceOf([
     node('var-name', {
       native: false,
       value: r,
-      type: 'object',
     })
   )
 

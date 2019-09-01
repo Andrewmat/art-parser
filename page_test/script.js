@@ -18,7 +18,6 @@ $('#submit').addEventListener('click', () => {
   }
 
   const treeDom = artInterpreter(parseResponse.result, artSvgRenderer)
-  console.log(treeDom)
   treeDom.forEach(dom => {
     $('#output').appendChild(dom)
   })

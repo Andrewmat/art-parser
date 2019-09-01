@@ -70,14 +70,7 @@ function resolveVarName({ value, native, type }, context) {
     throw new Error(`Could not find definition of '${value}'`)
   }
 
-  const def = context.defs.get(value)
-  if (def.type === type) {
-    return def.value
-  } else {
-    throw new Error(
-      `Expected '${value}' to be of type '${type}' but was type '${def.type}' instead`
-    )
-  }
+  return context.defs.get(value)
 }
 
 function resolveOperator({ value }) {
@@ -90,9 +83,9 @@ function resolveValue({ value }, context) {
 
 function resolveOperation({ leftArg, operation, rightArg }, context) {
   const [l, op, r] = [
-    resolveNode(leftArg),
-    resolveNode(operation),
-    resolveNode(rightArg),
+    resolveNode(leftArg, context),
+    resolveNode(operation, context),
+    resolveNode(rightArg, context),
   ]
 
   switch (op) {
@@ -122,7 +115,8 @@ function resolveMapper({ args, operation }, context) {
         `Unexpected value '${erroredValue}'. It should be a defined name`
       )
     }
-    return arg.value
+    // TODO resolver of undefined name
+    return arg.payload.value
   })
   const defs = new Map(defNames.map((name, i) => [name, context.args[i]]))
   const mapperContext = mergeContext(context, { defs })
@@ -131,7 +125,6 @@ function resolveMapper({ args, operation }, context) {
 
 function resolveAttribute({ name, value }, context) {
   const parentAttributes = (context.parent && context.parent.attributes) || []
-  // debugger
   // import same parent attribute to use in operations
   const parentAttribute = parentAttributes.find(
     ([attrName]) => attrName === name
@@ -208,12 +201,9 @@ function resolveArgs(args) {
 }
 
 function resolveCommandDef([name, value], context) {
-  const definitionName = name.payload.value // resolveNode(name, context)
+  const definitionName = name.payload.value // TODO resolver of undefined name
   const definitionValue = resolveNode(value, context)
-  context.defs.set(definitionName, {
-    type: 'object',
-    value: definitionValue,
-  })
+  context.defs.set(definitionName, definitionValue)
 }
 function resolveCommandDraw([value], context) {
   if (!context.renderer || !context.renderer.render) {

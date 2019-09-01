@@ -1,6 +1,14 @@
-def myCircle circle(r: 20)
+def normalCircle circle(r: 20, cx: 30, cy: 30)
 
-draw svg(width: 400, height: 200) {
-  draw myCircle(fill: 'red', cx: 30, cy: 30)
-  draw myCircle(fill: 'blue', cx: 60, cy: 60)
+svg(width: 400, height: 200) {
+  def biggerCircle normalCircle(r: radius => radius * 1.7)
+
+  biggerCircle(fill: 'red')
+  normalCircle(fill: 'blue')
+
+  normalCircle(
+    fill: 'green',
+    cx: parentX => parentX * 2,
+    cy: parentY => parentY * 2
+  )
 }

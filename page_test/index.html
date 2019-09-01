@@ -60,13 +60,20 @@
   </div>
   <script src="./script.js" type="module"></script>
   <script>
-    const example = `def myCircle circle(r: 20)
+    const example = `def normalCircle circle(r: 20, cx: 30, cy: 30)
 
 svg(width: 400, height: 200) {
-  myCircle(fill: 'red', cx: 30, cy: 30)
-  myCircle(fill: 'blue', cx: 60, cy: 60)
-}
-`
+  def biggerCircle normalCircle(r: radius => radius * 1.7)
+
+  biggerCircle(fill: 'red')
+  normalCircle(fill: 'blue')
+
+  normalCircle(
+    fill: 'green',
+    cx: parentX => parentX * 2,
+    cy: parentY => parentY * 2
+  )
+}`
     document.getElementById('input').value = example
 
   </script>

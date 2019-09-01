@@ -10,10 +10,10 @@ const operatorParser = P.choice([
 ]).map(r => node('operator', { value: r }))
 
 const valueParser = P.choice([
+  P.recursiveParser(() => mapperParser),
   numberParser,
   stringParser,
   varNameParser,
-  P.recursiveParser(() => mapperParser),
 ]).map(r => node('value', { value: r }))
 
 const operationParser = P.sequenceOf([
@@ -31,18 +31,21 @@ const operationParser = P.sequenceOf([
 )
 
 const mapperParser = P.sequenceOf([
-  P.str('fn'),
+  P.choice([
+    varNameParser.map(r => [r]),
+    betweenParenthesis(
+      P.sepBy(
+        P.sequenceOf([P.optionalWhitespace, P.char(','), P.optionalWhitespace])
+      )(varNameParser)
+    ),
+  ]),
   P.optionalWhitespace,
-  betweenParenthesis(
-    P.sepBy(P.optionalWhitespace, P.char(','), P.optionalWhitespace)(
-      varNameParser
-    )
-  ),
+  P.str('=>'),
   P.optionalWhitespace,
   operationParser,
 ]).map(rs =>
   node('mapper', {
-    args: rs[2],
+    args: rs[0],
     operation: rs[4],
   })
 )
