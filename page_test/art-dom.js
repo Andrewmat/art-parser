@@ -19,7 +19,7 @@ function block(commands, scope) {
 
 function def({ name, value }, defs) {
   if (defs.has(name.value)) {
-    throw new Error(`Cannot define '${args.name}'. It is already defined`)
+    throw new Error(`Cannot define '${args.name.value}'. It is already defined`)
   }
   defs.set(name.value, value)
 }
@@ -78,7 +78,7 @@ function findObjectDefinition(object, defs, scope) {
   } else if (scope.defs.has(object.name.value)) {
     foundObject = scope.defs.get(object.name.value)
   } else {
-    throw new Error(`Cannot find object '${name.value}'`)
+    throw new Error(`Cannot find object '${object.name.value}'`)
   }
   if (
     !foundObject ||

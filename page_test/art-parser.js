@@ -59,27 +59,24 @@ const attributesParser = betweenParenthesis(
   )
 )
 
-const childrenParser = P.sequenceOf([
-  // prettier-ignore
-  P.char('{'),
-  P.recursiveParser(() => blockParser),
-  P.char('}'),
-]).map(rs => rs[1])
+const childrenParser = betweenCurlyBrackets(
+  P.recursiveParser(() => blockParser)
+)
 
 const objectParser = P.sequenceOf([
   P.choice([objectNativeParser, objectNameParser]),
   P.optionalWhitespace,
-  attributesParser,
+  P.possibly(attributesParser),
   P.optionalWhitespace,
-  childrenParser,
+  P.possibly(childrenParser),
 ]).map(rs => ({
   type: 'object',
   name: rs[0],
-  attributes: rs[2],
-  children: rs[4],
+  attributes: rs[2] || {},
+  children: rs[4] || [],
 }))
 
-const defParser = P.sequenceOf([
+const defArgumentParser = P.sequenceOf([
   objectNameParser,
   P.whitespace,
   objectParser,
@@ -88,7 +85,7 @@ const defParser = P.sequenceOf([
   value: r[2],
 }))
 
-const drawParser = objectParser.map(r => ({
+const drawArgumentParser = objectParser.map(r => ({
   value: r,
 }))
 
@@ -98,10 +95,12 @@ const commandParser = P.sequenceOf([
 ])
   .map(rs => ({ type: 'command', value: rs[0] }))
   .chain(cmdR =>
-    (cmdR.value === 'def' ? defParser : drawParser).map(argR => ({
-      ...cmdR,
-      args: argR,
-    }))
+    (cmdR.value === 'def' ? defArgumentParser : drawArgumentParser).map(
+      argR => ({
+        ...cmdR,
+        args: argR,
+      })
+    )
   )
 
 const blockParser = P.many(commandParser)
