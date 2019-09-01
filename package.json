@@ -2,7 +2,7 @@
   "name": "art-parser",
   "version": "0.1.0",
   "description": "Parser for .art files",
-  "main": "index.mjs",
+  "main": "src/index.mjs",
   "type": "module",
   "scripts": {
     "serve": "serve page_test/",

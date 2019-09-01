@@ -1,5 +1,5 @@
 import fs from 'fs'
-import artParser from '../index.mjs'
+import artParser from '../src/index.mjs'
 
 const args = process.argv.slice(2)
 const fileName = args[0]
@@ -20,6 +20,7 @@ const parseResponse = artParser.run(artTarget)
 
 if (parseResponse.isError) {
   console.error(parseResponse.error)
+  process.exit(1)
 } else {
   console.log(JSON.stringify(parseResponse.result, null, 2))
 }
