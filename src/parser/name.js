@@ -12,7 +12,6 @@ const varNameParser = P.choice([
   ]).map(rs => rs.join('')),
 ]).map(r =>
   node('var-name', {
-    native: false,
     value: r,
   })
 )

@@ -60,7 +60,6 @@ function resolveNumber({ value }) {
 function resolveName({ value }, context) {
   if (!context.defs.has(value)) {
     return undefined
-    // throw new Error(`Could not find definition of '${value}'`)
   }
 
   return context.defs.get(value)
@@ -178,13 +177,11 @@ function resolveObject({ name, attributes, block }, context) {
       block: resolveNode(block, context),
     }
   }
-  const attributesContext = mergeContext(context, {
-    parent,
-  })
+  const childrenContext = mergeContext(context, { parent })
   return {
     name: parent.name,
-    attributes: resolveNode(attributes, attributesContext),
-    block: resolveNode(block, context),
+    attributes: resolveNode(attributes, childrenContext),
+    block: resolveNode(block, childrenContext),
   }
 }
 
@@ -227,7 +224,11 @@ function resolveCommandDraw([value], context) {
 
 function resolveBlock({ value }, context) {
   const blockContext = mergeContext(context, { defs: new Map() })
-  return value.map(node => resolveNode(node, blockContext)).filter(Boolean)
+  const parentBlock = context.parent.block || []
+  const ownBlock = value
+    .map(node => resolveNode(node, blockContext))
+    .filter(Boolean)
+  return [...parentBlock, ...ownBlock]
 }
 
 function mergeContext(ourContext = {}, theirContext = {}) {
