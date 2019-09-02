@@ -20,6 +20,21 @@
       width: 100%
     }
 
+    @media (max-width: 768px) {
+      #wrapper {
+        grid-template-rows: 1fr 1fr 400px 1fr 400px;
+        grid-template-columns: 1fr;
+        grid-template-areas:
+          "submit"
+          "input-label"
+          "input"
+          "output-label"
+          "output"
+        ;
+        height: auto;
+      }
+    }
+
     #input-label {
       grid-area: input-label;
       background-color: antiquewhite;
