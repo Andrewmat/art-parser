@@ -1,6 +1,7 @@
 import P, { node, betweenParenthesis } from './utils.js'
 import { varNameParser } from './name.js'
 import { numberParser, stringParser } from './native.js'
+import { objectParser } from './object.js'
 
 const operatorParser = P.choice([
   P.str('+'),
@@ -9,12 +10,16 @@ const operatorParser = P.choice([
   P.str('/'),
 ]).map(r => node('operator', { value: r }))
 
-const valueParser = P.choice([
-  P.recursiveParser(() => mapperParser),
-  numberParser,
-  stringParser,
-  varNameParser,
-]).map(r => node('value', { value: r }))
+const valueParser = P.recursiveParser(() =>
+  P.choice([
+    numberParser,
+    stringParser,
+    objectParser,
+    mapperParser,
+    // operationParser,
+    varNameParser,
+  ])
+).map(r => node('value', { value: r }))
 
 const operationParser = P.sequenceOf([
   valueParser,

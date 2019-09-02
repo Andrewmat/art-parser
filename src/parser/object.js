@@ -3,13 +3,15 @@ import { valueParser } from './value.js'
 import { varNameParser } from './name.js'
 import { commandListParser } from './command.js'
 
-const attributeParser = P.sequenceOf([
-  P.letters,
-  P.optionalWhitespace,
-  P.str(':'),
-  P.optionalWhitespace,
-  valueParser,
-]).map(rs =>
+const attributeParser = P.recursiveParser(() =>
+  P.sequenceOf([
+    varNameParser,
+    P.optionalWhitespace,
+    P.str(':'),
+    P.optionalWhitespace,
+    valueParser,
+  ])
+).map(rs =>
   node('attribute', {
     name: rs[0],
     value: rs[4],
@@ -20,7 +22,7 @@ const attributesParser = betweenParenthesis(
   P.sepBy(
     P.sequenceOf([P.optionalWhitespace, P.char(','), P.optionalWhitespace])
   )(attributeParser)
-).map(rs => node('attribute-list', { value: rs }))
+).map(rs => node('attribute-list', { values: rs }))
 
 const blockParser = betweenCurlyBrackets(
   P.recursiveParser(() => commandListParser)
@@ -29,7 +31,7 @@ const blockParser = betweenCurlyBrackets(
 const objectParser = P.sequenceOf([
   varNameParser,
   P.optionalWhitespace,
-  P.possibly(attributesParser),
+  attributesParser,
   P.optionalWhitespace,
   P.possibly(blockParser),
 ]).map(rs =>

@@ -122,7 +122,8 @@ function resolveMapper({ args, operation }, context) {
   return resolveNode(operation, mapperContext)
 }
 
-function resolveAttribute({ name, value }, context) {
+function resolveAttribute({ name: nameNode, value }, context) {
+  const name = nameNode.payload.value
   const parentAttributes = (context.parent && context.parent.attributes) || []
   // import same parent attribute to use in operations
   const parentAttribute = parentAttributes.find(
@@ -138,9 +139,9 @@ function resolveAttribute({ name, value }, context) {
   return [name, resolvedValue]
 }
 
-function resolveAttributeList({ value }, context) {
+function resolveAttributeList({ values }, context) {
   const parentAttributes = (context.parent && context.parent.attributes) || []
-  const ownAttributes = value.map(attributeNode => {
+  const ownAttributes = values.map(attributeNode => {
     if (attributeNode.type !== NODE_TYPES.attr) {
       throw new Error(
         `Cannot resolve attribute of type '${attributeNode.type}'`

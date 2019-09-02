@@ -1,11 +1,12 @@
 import P, { node } from './utils.js'
 import { varNameParser } from './name.js'
+import { valueParser } from './value.js'
 import { objectParser } from './object.js'
 
 const defArgsParser = P.sequenceOf([
   varNameParser,
   P.whitespace,
-  objectParser,
+  valueParser,
 ]).map(r => node('args', [r[0], r[2]]))
 
 const drawArgsParser = objectParser.map(r => node('args', [r]))
