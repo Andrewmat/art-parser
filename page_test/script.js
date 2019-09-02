@@ -1,7 +1,34 @@
 import { artParser, artInterpreter, artSvgRenderer } from './dist/art-parser.js'
-// import artAsDOM from './art-dom.js'
 
 const $ = document.querySelector.bind(document)
+
+const example = `
+def normalCircle circle(r: 20, cx: 30, cy: 30)
+
+svg(width: 400, height: 200) {
+  def <bigger circle> normalCircle(r: radius => radius * 1.7)
+
+  rect(
+    fill: '#ccc',
+    stroke: 'black',
+    x: 0,
+    y: 0,
+    width: '100%',
+    height: '100%'
+  )
+
+  <bigger circle>(fill: 'red')
+  normalCircle(fill: 'blue')
+
+  normalCircle(
+    fill: 'green',
+    cx: parentX => parentX * 3,
+    cy: parentY => parentY * 3
+  )
+}
+`.trim()
+
+$('#input').value = example
 
 $('#submit').addEventListener('click', () => {
   $('#output').innerHTML = ''
@@ -21,10 +48,4 @@ $('#submit').addEventListener('click', () => {
   treeDom.forEach(dom => {
     $('#output').appendChild(dom)
   })
-
-  // if (tree.isError) {
-  //   $('#output').value = tree.error
-  // } else {
-  //   $('#output').value = JSON.stringify(tree.result, 0, 2)
-  // }
 })

@@ -1,14 +1,23 @@
 def normalCircle circle(r: 20, cx: 30, cy: 30)
 
 svg(width: 400, height: 200) {
-  def biggerCircle normalCircle(r: radius => radius * 1.7)
+  def <bigger circle> normalCircle(r: radius => radius * 1.7)
 
-  biggerCircle(fill: 'red')
+  rect(
+    fill: '#ccc',
+    stroke: 'black',
+    x: 0,
+    y: 0,
+    width: '100%',
+    height: '100%'
+  )
+
+  <bigger circle>(fill: 'red')
   normalCircle(fill: 'blue')
 
   normalCircle(
     fill: 'green',
-    cx: parentX => parentX * 2,
-    cy: parentY => parentY * 2
+    cx: parentX => parentX * 3,
+    cy: parentY => parentY * 3
   )
 }

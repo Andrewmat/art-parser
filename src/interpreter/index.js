@@ -26,7 +26,7 @@ const NODE_TYPES = {
 const RESOLVER_MAP = new Map([
   [NODE_TYPES.str, resolveString], // ✔️
   [NODE_TYPES.num, resolveNumber], // ✔️
-  [NODE_TYPES.varName, resolveVarName], // ✔️
+  [NODE_TYPES.varName, resolveName], // ✔️
   [NODE_TYPES.operator, resolveOperator], // ✔️
   [NODE_TYPES.val, resolveValue], // ✔️
   [NODE_TYPES.operation, resolveOperation], // ✔️
@@ -57,20 +57,20 @@ function resolveNumber({ value }) {
   return Number(value)
 }
 
-function resolveVarName({ value, native, type }, context) {
-  if (native) {
-    return {
-      name: value,
-      attributes: [],
-      block: [],
-    }
-  }
-
+function resolveName({ value }, context) {
   if (!context.defs.has(value)) {
-    throw new Error(`Could not find definition of '${value}'`)
+    return undefined
+    // throw new Error(`Could not find definition of '${value}'`)
   }
 
   return context.defs.get(value)
+}
+
+function resolveUndefinedName({ value }, context) {
+  if (context.defs.has(value)) {
+    throw new Error(`Expected ${value} to be undefined`)
+  }
+  return value
 }
 
 function resolveOperator({ value }) {
@@ -116,7 +116,7 @@ function resolveMapper({ args, operation }, context) {
       )
     }
     // TODO resolver of undefined name
-    return arg.payload.value
+    return resolveUndefinedName(arg.payload, context)
   })
   const defs = new Map(defNames.map((name, i) => [name, context.args[i]]))
   const mapperContext = mergeContext(context, { defs })
@@ -170,6 +170,14 @@ function resolveObject({ name, attributes, block }, context) {
   }
 
   const parent = resolveNode(name, context)
+  if (!parent) {
+    // native object of the renderer
+    return {
+      name: resolveUndefinedName(name.payload, context),
+      attributes: resolveNode(attributes, context),
+      block: resolveNode(block, context),
+    }
+  }
   const attributesContext = mergeContext(context, {
     parent,
   })
@@ -201,7 +209,8 @@ function resolveArgs(args) {
 }
 
 function resolveCommandDef([name, value], context) {
-  const definitionName = name.payload.value // TODO resolver of undefined name
+  // TODO resolver of undefined name
+  const definitionName = resolveUndefinedName(name.payload, context)
   const definitionValue = resolveNode(value, context)
   context.defs.set(definitionName, definitionValue)
 }
