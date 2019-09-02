@@ -13,7 +13,14 @@ const node = (type, payload) => ({ type, payload })
 const strLimit = P.char("'")
 const betweenParenthesis = P.between(P.char('('))(P.char(')'))
 const betweenCurlyBrackets = P.between(P.char('{'))(P.char('}'))
+const betweenAngledBrackets = P.between(P.char('<'))(P.char('>'))
 
-export { node, strLimit, betweenParenthesis, betweenCurlyBrackets }
+export {
+  node,
+  strLimit,
+  betweenParenthesis,
+  betweenCurlyBrackets,
+  betweenAngledBrackets,
+}
 
 export default P

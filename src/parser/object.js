@@ -2,7 +2,6 @@ import P, { node, betweenParenthesis, betweenCurlyBrackets } from './utils.js'
 import { valueParser } from './value.js'
 import { varNameParser } from './name.js'
 import { commandListParser } from './command.js'
-import { nativeObjectParser } from './native.js'
 
 const attributeParser = P.sequenceOf([
   P.letters,
@@ -28,7 +27,7 @@ const blockParser = betweenCurlyBrackets(
 ).map(rs => node('block', { value: rs }))
 
 const objectParser = P.sequenceOf([
-  P.choice([nativeObjectParser, varNameParser]),
+  varNameParser,
   P.optionalWhitespace,
   P.possibly(attributesParser),
   P.optionalWhitespace,
