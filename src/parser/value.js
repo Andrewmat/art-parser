@@ -16,18 +16,20 @@ const valueParser = P.recursiveParser(() =>
     stringParser,
     objectParser,
     mapperParser,
-    // operationParser,
+    operationParser,
     varNameParser,
   ])
 ).map(r => node('value', { value: r }))
 
-const operationParser = P.sequenceOf([
-  valueParser,
-  P.optionalWhitespace,
-  operatorParser,
-  P.optionalWhitespace,
-  valueParser,
-]).map(rs =>
+const operationParser = betweenParenthesis(
+  P.sequenceOf([
+    valueParser,
+    P.optionalWhitespace,
+    operatorParser,
+    P.optionalWhitespace,
+    valueParser,
+  ])
+).map(rs =>
   node('operation', {
     leftArg: rs[0],
     operation: rs[2],
