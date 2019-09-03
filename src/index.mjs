@@ -1,5 +1,5 @@
 import artParser from './parser/index.js'
 import artInterpreter from './interpreter/index.js'
-import artSvgRenderer from './renderer/svg.js'
+import artDomRenderer from './renderer/dom.js'
 
-export { artParser, artInterpreter, artSvgRenderer }
+export { artParser, artInterpreter, artDomRenderer }
